@@ -24,7 +24,7 @@ class CheckoutPage {
       await this.page.goto('index.php?route=checkout/checkout', { waitUntil: 'domcontentloaded' });
     }
 
-    // Step 2: Billing details
+    //Billing details
     const billingBtn = this.page.locator('#button-payment-address, #button-guest, #button-account').first();
     await billingBtn.waitFor({ state: 'attached', timeout: 15000 });
 
@@ -52,20 +52,20 @@ class CheckoutPage {
     await billingBtn.click();
     await this.page.waitForTimeout(1500);
 
-    // Step 3: Delivery Address (if shown)
+    //Delivery Address
     const shippingAddressBtn = this.page.locator('#button-shipping-address').first();
     if (await shippingAddressBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
       await shippingAddressBtn.click();
       await this.page.waitForTimeout(1500);
     }
 
-    // Step 4: Delivery Method
+    //Delivery Method
     const shippingMethodBtn = this.page.locator('#button-shipping-method').first();
     await shippingMethodBtn.waitFor({ state: 'visible', timeout: 15000 });
     await shippingMethodBtn.click();
     await this.page.waitForTimeout(1500);
 
-    // Step 5: Payment Method
+    //Payment Method
     const paymentMethodBtn = this.page.locator('#button-payment-method').first();
     await paymentMethodBtn.waitFor({ state: 'visible', timeout: 15000 });
     const agreeCheckbox = this.page.locator('input[name="agree"]').first();
@@ -75,7 +75,7 @@ class CheckoutPage {
     await paymentMethodBtn.click();
     await this.page.waitForTimeout(1500);
 
-    // Step 6: Confirm Order
+    //Confirm Order
     const confirmBtn = this.page.locator('#button-confirm').first();
     await confirmBtn.waitFor({ state: 'visible', timeout: 15000 });
     await confirmBtn.click();

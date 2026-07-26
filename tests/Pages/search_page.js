@@ -24,7 +24,7 @@ class SearchPage {
   }
 
   async navigate() {
-    await this.page.goto('/', { waitUntil: 'domcontentloaded' });
+    await this.page.goto('index.php?route=common/home', { waitUntil: 'domcontentloaded' });
   }
 
   async performHeaderSearch(query) {
