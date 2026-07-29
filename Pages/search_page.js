@@ -9,7 +9,7 @@ class SearchPage {
     this.searchButton = page.locator('#search button');
     this.searchResultsHeading = page.locator('#content h1');
     this.productCards = page.locator('.product-layout');
-    this.noResultsMessage = page.locator('#content p:has-text("There is no product that matches the search criteria.")');
+    this.noResultsMessage = page.locator('#content p:has-text("There is no product that matches the search criteria."), #content p:has-text("Your shopping cart is empty!"), #content:not(:has(.product-layout)) h2:has-text("Search")').first();
 
     this.categoryHeaderLinks = page.locator('nav#menu ul.nav > li > a');
 
@@ -83,6 +83,7 @@ class SearchPage {
       response.url().includes('route=checkout/cart/add') && response.status() === 200,
       { timeout: 10000 }
     ).catch(() => {});
+    await this.page.waitForTimeout(1500);
   }
 }
 

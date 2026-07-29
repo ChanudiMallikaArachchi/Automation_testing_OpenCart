@@ -1,27 +1,38 @@
-name: Playwright Tests
+name: Playwright Test Automation Suite
+
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
-        node-version: lts/*
-    - name: Install dependencies
+        node-version: 20
+
+    - name: Install Node Dependencies
       run: npm ci
-    - name: Install Playwright Browsers
+
+    - name: Install Playwright Browsers with Dependencies
       run: npx playwright install --with-deps
-    - name: Run Playwright tests
+
+    - name: Run Playwright Tests (Parallel Execution)
       run: npx playwright test
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
+
+    - name: Upload Playwright Test Report Artifact
+      if: always()
+      uses: actions/upload-artifact@v4
       with:
-        name: playwright-report
+        name: playwright-html-report
         path: playwright-report/
         retention-days: 30

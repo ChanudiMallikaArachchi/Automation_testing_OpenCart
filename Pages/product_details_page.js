@@ -49,13 +49,17 @@ class ProductDetailsPage {
     await this.compareProductBtn.click();
   }
 
-  async submitReview({ name, review, rating }) {
+  async submitReview({ name, review, rating = 5 }) {
     await this.reviewTab.click();
-    await this.reviewerNameInput.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
-    await this.reviewerNameInput.fill(name);
-    await this.reviewTextInput.fill(review);
-    await this.ratingRadio(rating).check();
+    await this.reviewerNameInput.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+    await this.reviewerNameInput.fill(name || '');
+    await this.reviewTextInput.fill(review || '');
+    const ratingRadio = this.ratingRadio(rating);
+    await ratingRadio.check({ force: true }).catch(async () => {
+      await ratingRadio.click({ force: true });
+    });
     await this.submitReviewBtn.click();
+    await this.page.waitForTimeout(1000);
   }
 }
 

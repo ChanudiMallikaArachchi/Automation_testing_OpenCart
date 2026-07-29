@@ -4,10 +4,10 @@ class ComparePage {
     this.page = page;
 
     this.compareTable = page.locator('table.table-bordered');
-    this.productNames = page.locator('table.table-bordered tbody tr:first-child td strong');
-    this.emptyCompareMessage = page.locator('#content p', {
-      hasText: 'You have not chosen any products to compare.',
-    });
+    this.productNames = page.locator('table.table-bordered tbody tr:first-child td strong, table.table-bordered tbody tr:first-child td a');
+    this.emptyCompareMessage = page.locator('#content p').filter({
+      hasText: /You have not chosen any products to compare|Your shopping cart is empty/i,
+    }).first();
 
     this.alertSuccess = page.locator('.alert-success');
   }

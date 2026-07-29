@@ -56,9 +56,11 @@ test.describe('Wishlist Module', () => {
       email: `remove_wish_${Date.now()}@example.com`,
       password: 'Password123!',
     });
+    await expect(page.locator('#content')).toContainText(/Your new account has been successfully created|Your Account Has Been Created/);
 
     await productDetailsPage.navigateToProduct('40');
     await productDetailsPage.addToWishlist();
+    await expect(page.locator('.alert-success, .alert')).toContainText(/added iPhone to your wish list/i);
 
     await wishlistPage.navigate();
     await wishlistPage.removeItem('iPhone');

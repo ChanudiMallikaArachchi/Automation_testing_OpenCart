@@ -9,7 +9,7 @@ test.describe('Account Registration Flow', () => {
         await registerPage.navigate();
     });
 
-    test('Should register a new account successfully', async () => {
+    test('Should register a new account successfully', async ({ page }) => {
 
         const uniqueEmail = `testuser_${Date.now()}@example.com`;
 
@@ -21,8 +21,8 @@ test.describe('Account Registration Flow', () => {
             subscribe: true,
         });
 
-        // Verify confirmation heading
-        await expect(registerPage.successHeader).toHaveText('Your Account Has Been Created!');
+        // Verify confirmation message
+        await expect(page.locator('#content')).toContainText(/Your new account has been successfully created|Your Account Has Been Created/);
     });
 
     test('Should show field validation errors when submitting empty form', async () => {

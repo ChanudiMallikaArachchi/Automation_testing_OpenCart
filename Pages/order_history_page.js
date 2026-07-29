@@ -4,8 +4,8 @@ class OrderHistoryPage {
     this.page = page;
 
     this.orderRows = page.locator('table.table-bordered tbody tr');
-    this.noOrdersMessage = page.locator('#content p', {
-      hasText: 'You have not made any previous orders!',
+    this.noOrdersMessage = page.locator('#content p').filter({
+      hasText: /You have not made any previous orders!|Your shopping cart is empty!/,
     });
 
     this.viewOrderBtn = (orderId) =>

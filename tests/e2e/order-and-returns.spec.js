@@ -24,6 +24,7 @@ test.describe('Order History & Return Workflows', () => {
       email: email,
       password: 'Password123!',
     });
+    await expect(page.locator('#content')).toContainText(/Your new account has been successfully created|Your Account Has Been Created/);
 
     //Navigate to Order History
     await orderHistoryPage.navigate();

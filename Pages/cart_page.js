@@ -54,10 +54,11 @@ class CartPage {
 
   async removeItem(itemIdentifier = 0) {
     const row = this.getRow(itemIdentifier);
-    const removeBtn = row.locator('button[data-original-title="Remove"], button:has(.fa-times-circle), button.btn-danger').first();
+    const removeBtn = row.locator('button[data-original-title="Remove"], button:has(.fa-times-circle), button.btn-danger, button[onclick*="cart.remove"]').first();
     await removeBtn.waitFor({ state: 'attached', timeout: 5000 }).catch(() => {});
     await removeBtn.click({ force: true });
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForLoadState('domcontentloaded').catch(() => {});
+    await this.page.waitForTimeout(2000);
   }
 
   async proceedToCheckout() {

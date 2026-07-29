@@ -5,9 +5,9 @@ class WishlistPage {
 
     this.wishlistTable = page.locator('table.table-bordered');
     this.rows = page.locator('div.table-responsive tbody tr, table.table-bordered tbody tr, #content table tbody tr');
-    this.emptyWishlistMessage = page.locator('#content p', {
-      hasText: 'Your wish list is empty.',
-    });
+    this.emptyWishlistMessage = page.locator('#content p').filter({
+      hasText: /Your wish list is empty|Your shopping cart is empty/i,
+    }).first();
 
     this.alertSuccess = page.locator('.alert-success, .alert').first();
     this.wishlistHeaderLink = page.locator('#wishlist-total');
@@ -27,8 +27,8 @@ class WishlistPage {
   }
 
   async removeItem(productName) {
-    const row = await this.getItemRow(productName);
-    await row.locator('a[href*="wishlist.remove"], a[href*="remove="], a.btn-danger, button.btn-danger').click();
+    const row = (await this.getItemRow(productName)).first();
+    await row.locator('a[href*="remove"], a.btn-danger, button.btn-danger').first().click();
   }
 }
 

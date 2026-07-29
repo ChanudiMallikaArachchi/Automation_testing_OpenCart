@@ -18,6 +18,7 @@ test.describe('User Authentication - Login', () => {
   });
 
   test('Should register a user and log in with those credentials', async ({ page }) => {
+    test.setTimeout(60000);
     const registerPage = new RegisterPage(page);
     const email = `login_test_${Date.now()}@example.com`;
     const password = 'SecurePassword123!';

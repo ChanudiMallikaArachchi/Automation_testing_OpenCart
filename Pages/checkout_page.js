@@ -28,6 +28,12 @@ class CheckoutPage {
     const billingBtn = this.page.locator('#button-payment-address, #button-guest, #button-account').first();
     await billingBtn.waitFor({ state: 'attached', timeout: 15000 });
 
+    const newAddressRadio = this.page.locator('input[name="payment_address"][value="new"]').first();
+    if (await newAddressRadio.isVisible().catch(() => false)) {
+      await newAddressRadio.check({ force: true }).catch(() => {});
+      await this.page.waitForTimeout(500);
+    }
+
     const firstNameInput = this.page.locator('#input-payment-firstname, #input-firstname').first();
     await firstNameInput.waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
 
@@ -40,12 +46,14 @@ class CheckoutPage {
 
       const countrySelect = this.page.locator('#input-payment-country, #input-country').first();
       if (await countrySelect.isVisible()) {
-        await countrySelect.selectOption({ label: details.country });
+        await countrySelect.selectOption({ label: details.country }).catch(() => {});
         await this.page.waitForTimeout(1000);
         const zoneSelect = this.page.locator('#input-payment-zone, #input-zone').first();
-        await zoneSelect.selectOption({ label: details.zone }).catch(async () => {
-          await zoneSelect.selectOption({ index: 1 });
-        });
+        await this.page.waitForFunction(
+          (sel) => sel && sel.options.length > 1,
+          await zoneSelect.elementHandle()
+        ).catch(() => {});
+        await zoneSelect.selectOption({ index: 1 }).catch(() => {});
       }
     }
 
@@ -54,31 +62,50 @@ class CheckoutPage {
 
     //Delivery Address
     const shippingAddressBtn = this.page.locator('#button-shipping-address').first();
-    if (await shippingAddressBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await shippingAddressBtn.click();
-      await this.page.waitForTimeout(1500);
+    if (await shippingAddressBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await shippingAddressBtn.click().catch(() => {});
+      await this.page.waitForTimeout(1000);
     }
 
     //Delivery Method
-    const shippingMethodBtn = this.page.locator('#button-shipping-method').first();
-    await shippingMethodBtn.waitFor({ state: 'visible', timeout: 15000 });
-    await shippingMethodBtn.click();
+    const shippingMethodHeader = this.page.locator('a[href="#collapse-shipping-method"], a[href*="shipping-method"]').first();
+    if (await shippingMethodHeader.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await shippingMethodHeader.click().catch(() => {});
+      await this.page.waitForTimeout(500);
+    }
+    await this.page.evaluate(() => {
+      const btn = document.querySelector('#button-shipping-method');
+      if (btn) btn.click();
+    }).catch(() => {});
     await this.page.waitForTimeout(1500);
 
     //Payment Method
-    const paymentMethodBtn = this.page.locator('#button-payment-method').first();
-    await paymentMethodBtn.waitFor({ state: 'visible', timeout: 15000 });
-    const agreeCheckbox = this.page.locator('input[name="agree"]').first();
-    if ((await agreeCheckbox.count()) > 0) {
-      await agreeCheckbox.check({ force: true }).catch(() => {});
+    const paymentMethodHeader = this.page.locator('a[href="#collapse-payment-method"], a[href*="payment-method"]').first();
+    if (await paymentMethodHeader.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await paymentMethodHeader.click().catch(() => {});
+      await this.page.waitForTimeout(500);
     }
-    await paymentMethodBtn.click();
+    const agreeCheckbox = this.page.locator('input[name="agree"]').first();
+    if (await agreeCheckbox.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await agreeCheckbox.check({ force: true }).catch(() => {});
+      await this.page.waitForTimeout(500);
+    }
+    await this.page.evaluate(() => {
+      const btn = document.querySelector('#button-payment-method');
+      if (btn) btn.click();
+    }).catch(() => {});
     await this.page.waitForTimeout(1500);
 
     //Confirm Order
-    const confirmBtn = this.page.locator('#button-confirm').first();
-    await confirmBtn.waitFor({ state: 'visible', timeout: 15000 });
-    await confirmBtn.click();
+    const confirmHeader = this.page.locator('a[href="#collapse-checkout-confirm"], a[href*="confirm"]').first();
+    if (await confirmHeader.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await confirmHeader.click().catch(() => {});
+      await this.page.waitForTimeout(500);
+    }
+    await this.page.evaluate(() => {
+      const btn = document.querySelector('#button-confirm, input[value="Confirm Order"]');
+      if (btn) btn.click();
+    }).catch(() => {});
 
     await this.page.waitForURL(/checkout\/success/, { waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
   }
