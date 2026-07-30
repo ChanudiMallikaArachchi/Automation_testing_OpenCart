@@ -21,14 +21,12 @@ test.describe('Account Registration Flow', () => {
             subscribe: true,
         });
 
-        // Verify confirmation message
         await expect(page.locator('#content')).toContainText(/Your new account has been successfully created|Your Account Has Been Created/);
     });
 
     test('Should show field validation errors when submitting empty form', async () => {
         await registerPage.continueBtn.click();
 
-        // Verify inline field validation errors
         await expect(registerPage.firstNameError).toBeVisible();
         await expect(registerPage.alertWarning).toContainText('Warning: You must agree to the Privacy Policy!');
     });

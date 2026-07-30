@@ -16,7 +16,6 @@ test.describe('Order History & Return Workflows', () => {
     const registerPage = new RegisterPage(page);
     const email = `new_buyer_${Date.now()}@example.com`;
 
-    //Register new clean user
     await registerPage.navigate();
     await registerPage.registerUser({
       firstName: 'Fresh',
@@ -26,7 +25,6 @@ test.describe('Order History & Return Workflows', () => {
     });
     await expect(page.locator('#content')).toContainText(/Your new account has been successfully created|Your Account Has Been Created/);
 
-    //Navigate to Order History
     await orderHistoryPage.navigate();
     await expect(orderHistoryPage.noOrdersMessage).toBeVisible();
     expect(await orderHistoryPage.getOrderCount()).toBe(0);
