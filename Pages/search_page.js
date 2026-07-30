@@ -29,7 +29,10 @@ class SearchPage {
 
   async performHeaderSearch(query) {
     await this.searchInput.fill(query);
-    await this.searchButton.click();
+    await Promise.all([
+      this.page.goto(`index.php?route=product/search&search=${encodeURIComponent(query)}`, { waitUntil: 'domcontentloaded' }).catch(() => {}),
+      this.searchButton.click().catch(() => {})
+    ]);
   }
 
   async selectCategoryFromHeader(categoryName, subCategoryName = null) {

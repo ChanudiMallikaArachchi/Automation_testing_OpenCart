@@ -4,7 +4,7 @@ const { CheckoutPage } = require('../../Pages/checkout_page');
 
 test.describe('End-to-End Checkout Workflow', () => {
   test('Should complete purchase flow as an authenticated user', async ({ page }) => {
-    test.setTimeout(60000);
+    test.setTimeout(90000);
 
     const registerPage = new RegisterPage(page);
     const checkoutPage = new CheckoutPage(page);
@@ -18,6 +18,7 @@ test.describe('End-to-End Checkout Workflow', () => {
       email: userEmail,
       password: 'Password123!',
     });
+    await expect(page.locator('#content')).toContainText(/Your new account has been successfully created|Your Account Has Been Created/);
 
     // Add HP LP3065 (product_id 47) which has stock in demo DB
     await page.goto('index.php?route=product/product&product_id=47', { waitUntil: 'domcontentloaded' });

@@ -39,6 +39,7 @@ class ProductDetailsPage {
 
   async addToCart() {
     await this.addToCartBtn.click();
+    await this.page.waitForTimeout(1000);
   }
 
   async addToWishlist() {
@@ -50,7 +51,12 @@ class ProductDetailsPage {
   }
 
   async submitReview({ name, review, rating = 5 }) {
-    await this.reviewTab.click();
+    await this.page.evaluate(() => {
+      if (typeof $ !== 'undefined' && $('a[href*="tab-review"]').length) {
+        $('a[href*="tab-review"]').tab('show');
+      }
+    }).catch(() => {});
+    await this.reviewTab.click().catch(() => {});
     await this.reviewerNameInput.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
     await this.reviewerNameInput.fill(name || '');
     await this.reviewTextInput.fill(review || '');

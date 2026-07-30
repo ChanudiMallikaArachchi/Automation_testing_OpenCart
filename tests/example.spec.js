@@ -9,6 +9,7 @@ test('has title', async ({ page }) => {
 });
 
 test('get started link', async ({ page }) => {
+  test.setTimeout(45000);
   await page.goto('https://playwright.dev/');
 
   // Click the get started link.

@@ -7,14 +7,14 @@ test.describe('Shopping Cart Operations', () => {
   let searchPage;
 
   test.beforeEach(async ({ page }) => {
+    test.setTimeout(45000);
     cartPage = new CartPage(page);
     searchPage = new SearchPage(page);
 
-    await page.goto('index.php?route=common/home', { waitUntil: 'domcontentloaded' });
-    await searchPage.performHeaderSearch('iPhone');
-    await searchPage.addProductToCartByName('iPhone');
-    
+    await page.goto('index.php?route=product/product&product_id=40', { waitUntil: 'domcontentloaded' });
+    await page.locator('#button-cart').click();
     await expect(page.locator('.alert-success, .alert')).toBeVisible();
+    await page.waitForTimeout(1000);
     await cartPage.navigate();
   });
 

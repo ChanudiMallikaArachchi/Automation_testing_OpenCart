@@ -41,10 +41,14 @@ class RegisterPage {
     }
 
     if (subscribe) {
-      await this.newsletterToggle.check();
+      await this.newsletterToggle.check({ force: true }).catch(async () => {
+        await this.newsletterToggle.click({ force: true });
+      });
     }
 
-    await this.privacyPolicyToggle.check();
+    await this.privacyPolicyToggle.check({ force: true }).catch(async () => {
+      await this.privacyPolicyToggle.click({ force: true });
+    });
     await this.continueBtn.click();
   }
 }

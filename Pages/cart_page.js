@@ -32,32 +32,35 @@ class CartPage {
     return this.cartTableRows.filter({ hasText: itemIdentifier }).first();
   }
 
-  async updateQuantity(itemIdentifier, quantity) {
+  async updateQuantity(itemIdentifier = 0, quantity = 1) {
     const row = this.getRow(itemIdentifier);
-    const input = row.locator('input[name*="quantity"], input[type="text"]').first();
-    await input.fill(String(quantity));
-    const updateBtn = row.locator('button[data-original-title="Update"], button:has(.fa-refresh), button:has-text("Refresh"), button.btn-primary').first();
+    const qtyInput = row.locator('input[name*="quantity"]').first();
+    await qtyInput.fill(String(quantity));
+
+    const updateBtn = row.locator('button[type="submit"], button:has(.fa-refresh), button[data-original-title="Update"]').first();
     await updateBtn.click();
-    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForTimeout(1500);
   }
 
   async applyCoupon(couponCode) {
-    const link = this.couponAccordion.first();
-    if (await link.isVisible().catch(() => false)) {
-      await link.click({ force: true }).catch(() => {});
+    const accordion = this.page.locator('a[href="#collapse-coupon"], a:has-text("Use Coupon Code")');
+    if (await accordion.isVisible().catch(() => false)) {
+      await accordion.click();
       await this.page.waitForTimeout(500);
     }
     await this.couponInput.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
     await this.couponInput.fill(couponCode);
     await this.applyCouponBtn.click();
+    await this.page.waitForTimeout(1000);
   }
 
   async removeItem(itemIdentifier = 0) {
     const row = this.getRow(itemIdentifier);
     const removeBtn = row.locator('button[data-original-title="Remove"], button:has(.fa-times-circle), button.btn-danger, button[onclick*="cart.remove"]').first();
-    await removeBtn.waitFor({ state: 'attached', timeout: 5000 }).catch(() => {});
-    await removeBtn.click({ force: true });
-    await this.page.waitForLoadState('domcontentloaded').catch(() => {});
+    await removeBtn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+    await removeBtn.click().catch(async () => {
+      await removeBtn.click({ force: true });
+    });
     await this.page.waitForTimeout(2000);
   }
 

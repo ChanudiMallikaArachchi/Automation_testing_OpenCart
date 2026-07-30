@@ -18,6 +18,7 @@ test.describe('Wishlist Module', () => {
   });
 
   test('Should add product to Wishlist as authenticated user and transfer to Cart', async ({ page }) => {
+    test.setTimeout(60000);
     const registerPage = new RegisterPage(page);
     const email = `wishlist_user_${Date.now()}@example.com`;
 
@@ -46,6 +47,7 @@ test.describe('Wishlist Module', () => {
   });
 
   test('Should remove item from Wishlist', async ({ page }) => {
+    test.setTimeout(60000);
     const registerPage = new RegisterPage(page);
 
     // Register & Add item

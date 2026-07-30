@@ -30,6 +30,7 @@ test.describe('User Authentication - Login', () => {
       email: email,
       password: password,
     });
+    await expect(page.locator('#content')).toContainText(/Your new account has been successfully created|Your Account Has Been Created/);
 
     await page.goto('index.php?route=account/logout');
 
