@@ -22,7 +22,6 @@ test.describe('Wishlist Module', () => {
     const registerPage = new RegisterPage(page);
     const email = `wishlist_user_${Date.now()}@example.com`;
 
-    // 1. Register user
     await registerPage.navigate();
     await registerPage.registerUser({
       firstName: 'Wish',
@@ -31,17 +30,14 @@ test.describe('Wishlist Module', () => {
       password: 'Password123!',
     });
 
-    // 2. Add product (iPhone) to Wishlist from details page
     await productDetailsPage.navigateToProduct('40');
     await productDetailsPage.addToWishlist();
     await expect(productDetailsPage.alertSuccess).toContainText('Success: You have added iPhone to your wish list!');
 
-    // 3. Open Wishlist and verify product presence
     await wishlistPage.navigate();
     const itemRow = await wishlistPage.getItemRow('iPhone');
     await expect(itemRow).toBeVisible();
 
-    // 4. Move product from Wishlist to Cart
     await wishlistPage.addProductToCart('iPhone');
     await expect(wishlistPage.alertSuccess).toContainText('Success: You have added iPhone to your shopping cart!');
   });
@@ -50,7 +46,6 @@ test.describe('Wishlist Module', () => {
     test.setTimeout(60000);
     const registerPage = new RegisterPage(page);
 
-    // Register & Add item
     await registerPage.navigate();
     await registerPage.registerUser({
       firstName: 'Remove',

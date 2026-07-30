@@ -1,7 +1,5 @@
 class CheckoutPage {
-  /**
-   * @param {import('@playwright/test').Page} page
-   */
+
   constructor(page) {
     this.page = page;
 
@@ -24,7 +22,6 @@ class CheckoutPage {
       await this.page.goto('index.php?route=checkout/checkout', { waitUntil: 'domcontentloaded' });
     }
 
-    //Billing details
     const billingBtn = this.page.locator('#button-payment-address, #button-guest, #button-account').first();
     await billingBtn.waitFor({ state: 'attached', timeout: 15000 });
 
@@ -60,14 +57,12 @@ class CheckoutPage {
     await billingBtn.click();
     await this.page.waitForTimeout(1500);
 
-    //Delivery Address
     const shippingAddressBtn = this.page.locator('#button-shipping-address').first();
     if (await shippingAddressBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
       await shippingAddressBtn.click().catch(() => {});
       await this.page.waitForTimeout(1000);
     }
 
-    //Delivery Method
     const shippingMethodHeader = this.page.locator('a[href="#collapse-shipping-method"], a[href*="shipping-method"]').first();
     if (await shippingMethodHeader.isVisible({ timeout: 3000 }).catch(() => false)) {
       await shippingMethodHeader.click().catch(() => {});
@@ -79,7 +74,6 @@ class CheckoutPage {
     }).catch(() => {});
     await this.page.waitForTimeout(1500);
 
-    //Payment Method
     const paymentMethodHeader = this.page.locator('a[href="#collapse-payment-method"], a[href*="payment-method"]').first();
     if (await paymentMethodHeader.isVisible({ timeout: 3000 }).catch(() => false)) {
       await paymentMethodHeader.click().catch(() => {});
@@ -96,7 +90,6 @@ class CheckoutPage {
     }).catch(() => {});
     await this.page.waitForTimeout(1500);
 
-    //Confirm Order
     const confirmHeader = this.page.locator('a[href="#collapse-checkout-confirm"], a[href*="confirm"]').first();
     if (await confirmHeader.isVisible({ timeout: 3000 }).catch(() => false)) {
       await confirmHeader.click().catch(() => {});
