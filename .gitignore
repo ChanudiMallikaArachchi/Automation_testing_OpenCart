@@ -8,3 +8,4 @@ node_modules/
 /playwright/.auth/
 .auth/
 scratch_test.js
+*-snapshots/
